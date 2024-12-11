@@ -1,0 +1,73 @@
+.borderr{
+    background-image: linear-gradient(45deg,rgb(198, 255, 198),rgb(255, 189, 255));
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    display: grid;
+    align-items: center;
+}
+.border_colored{
+    border-image: linear-gradient(45deg,black,bisque) 1 !important;
+}
+.sub{
+    margin-left: auto !important;
+}
+.picfooter{
+    background: url("../images/footer.jpg") center center no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: max-content;
+}
+.picback{
+    background: url("../images/techandall_wallpaper_1.jpg") no-repeat;
+    background-size: cover;
+    width: 100%;
+}
+.swiper {
+    width: 70vw;
+    height: 70vh;
+}
+.picback_second{
+    background: url("../images/secondslide_1.jpg") no-repeat;
+    background-size: cover;
+}
+.marginphone{
+    margin: auto;
+}
+.marx{
+    margin-left: 39vw;
+    margin-right: 39vw;
+}
+body{
+
+    @font-face {
+        font-family: 'A Iranian Sans';
+        src: url("../A-Iranian-Sans/Iranian Sans.ttf");
+    }
+    font-family: "A Iranian Sans", cursive;
+}
+.tri{
+    width: 0;
+    height: 0;
+    border-left: 40vw solid transparent;
+    border-right: 40vw solid transparent;
+
+    border-top: 40vh solid #40e0d0;
+}
+.tri-sec{
+    width: 0;
+    height: 0;
+    border-left: 10vw solid transparent;
+    border-right: 10vw solid transparent;
+    margin-top: 3vh;
+    border-bottom: 7vh solid #40e0d0;
+}
+.card{
+   background-color: transparent;
+}
+.hovered:hover{
+    transform: scale(1.02,1.02);
+    box-shadow: hsl(from white to black);
+    border-radius: 2%;
+    z-index: 1000;
+}
