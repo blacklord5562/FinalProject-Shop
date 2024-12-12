@@ -1,0 +1,99 @@
+@media all and (max-width: 767.99px) {
+    .bigdis{
+        display: none;
+    }
+    .py-6{
+        padding-top: 10vh;
+    }
+}
+@media all and (min-width: 768px){
+    .smalldis{
+        display: none;
+    }
+    .py-6{
+        padding-top: 20vh;
+    }
+}
+a{
+    color: #979292;
+    text-decoration: none;
+}
+a:hover{
+    color: white;
+    cursor: pointer;
+}
+.bg1cls{
+    background: #3b5d50;
+}
+.bg2cls{
+    background: #eff2f1;
+}
+.underlinecls{
+    background: #ffc107;
+    height: 5px;
+}
+.diactiv{
+    color: #979292;
+    transition: width 1s;
+}
+
+.underlinehovercls{
+    background: #ffc107;
+    height: 5px;
+    width: 0px;
+    transition: width 2s;
+}
+.diactiv:hover{
+    .underlinehovercls{
+        width: 100%;
+    }
+    color: white;
+    cursor: pointer;
+}
+.texdec{
+    text-decoration: none;
+}
+
+.topcls{
+    position: absolute;
+}
+.textnone{
+    list-style: none;
+}
+.discls{
+    visibility: hidden;
+}
+.rmdiv{
+    display: none;
+}
+.shdiv{
+    display: block;
+}
+.showcls:hover{
+    .discls{
+        visibility: visible;
+    }
+    background: #beb9b9;
+}
+.swiper {
+    width: 100%;
+    height: 60vh;
+    background: #eff2f1;
+}
+.burger{
+    position: fixed;
+    height: 100vh;
+    width: 50%;
+    background: rgba(0,0,0,0.36);
+    z-index: 1000;
+    display: none;
+}
+.burgerbtn{
+    font-size: 25px;
+    background: none;
+    text-decoration: none;
+    width: 100%;
+    border: none;
+    padding: 20px 0px;
+}
+

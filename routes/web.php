@@ -1,39 +1,73 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\AdminLoginController;
+
+
 /*
- * client
- */
+|--------------------------------------------------------------------------
+| Client Routes
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->prefix('/client')->group(function () {
     Route::get('/', function () {
+        // Ensure only clients can access
+        if (Auth::user()->role !== 'client') {
+            return redirect()->route('login'); // Redirect to login if not a client
+        }
         return view('client.home');
     })->name('home');
+
     Route::get('/home', function () {
+        if (Auth::user()->role !== 'client') {
+            return redirect()->route('login');
+        }
         return view('client.home');
     });
-});
 
-// Add the route for editing the user profile
-Route::middleware('auth')->get('/profile', [\App\Http\Controllers\UserController::class, 'edit'])->name('profile.edit');
-Route::middleware('auth')->post('/profile', [\App\Http\Controllers\UserController::class, 'update'])->name('profile.update');
-
-
-
-/*
- * Admin Routes
- */
-Route::middleware('auth')->get('/admin', function () {
-    return view('admin.master');
+    Route::get('/profile', [\App\Http\Controllers\UserController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [\App\Http\Controllers\UserController::class, 'update'])->name('profile.update');
 });
 
 /*
- * Admin Profile Route
- * This will handle showing the user's profile information in the admin area
- */
-Route::middleware('auth')->get('/admin/profile', function () {
-    $user = auth()->user();  // Get the logged-in user data
-    return view('admin.profile', compact('user'));  // Return the profile view and pass the user data
-})->name('admin.profile');
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('/admin')->group(function () {
+    // Admin login route (without authentication)
+    Route::get('/login', function () {
+        return view('auth.admin-login');
+    })->name('admin.login');
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/', function () {
+            // Ensure only admins can access
+            if (Auth::user()->role !== 'admin') {
+                return redirect()->route('admin.login'); // Redirect to admin login if not an admin
+            }
+            return view('admin.master');
+        })->name('admin.dashboard');
+
+        Route::get('/profile', function () {
+            if (Auth::user()->role !== 'admin') {
+                return redirect()->route('admin.login');
+            }
+            $user = Auth::user(); // Get the logged-in admin data
+            return view('admin.profile', compact('user')); // Return the profile view
+        })->name('admin.profile');
+    });
+});
+Route::get('/admin/login', function () {
+    if (Auth::check() && Auth::user()->role === 'client') {
+        return redirect()->route('home'); // Redirect clients to their home page
+    }
+
+    return view('auth.admin-login');
+})->name('admin.login');
+
+
 
 /*
  * Gallery Routes
@@ -100,8 +134,15 @@ Route::post('/admin/store/product', [\App\Http\Controllers\admin\productControll
 Route::get('admin/edit/product/{id}', [\App\Http\Controllers\admin\productController::class, 'edit'])->name('product.edit');
 Route::delete('/admin/delete/product/{id}', [\App\Http\Controllers\admin\productController::class, 'destroy'])->name('product.destroy');
 Route::get('/',function (){
-    $menu=\App\Models\admin\Menu::all();
-    return view('client.test' , ['menu'=>$menu]);
+    $menu = \App\Models\admin\Menu::where('status', 1)->get();
+    $attribute=\App\Models\admin\Attribute::all();
+    $category=\App\Models\admin\Category::all();
+    $page=\App\Models\admin\Page::all();
+    $picture=\App\Models\admin\Picture::all();
+    $gallery=\App\Models\admin\Gallery::all();
+    $picgallery=\App\Models\admin\Picgallery::all();
+    $product=\App\Models\admin\Product::all();
+    return view('client.test' , ['menu'=>$menu,'attribute'=>$attribute,'category'=>$category,'page'=>$page,'picture'=>$picture,'gallery'=>$gallery,'picgallery'=>$picgallery,'product'=>$product]);
 })->name('test');
 /*
  * client

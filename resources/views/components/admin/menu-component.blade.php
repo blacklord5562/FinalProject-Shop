@@ -1,4 +1,4 @@
-<nav class="nav">
+<nav class="nav" xmlns="http://www.w3.org/1999/html">
     <div class="dropdown" >
         <button class="text-white dropdown-toggle btn" data-bs-toggle="dropdown" id="nid">
             منو
@@ -78,6 +78,17 @@
             </li>
             <li class="nav-item">
                 <a href="{{route('product.index')}}" class="nav-link text-dark">لیست کالاها</a>
+            </li>
+        </ul>
+        <button class="text-white dropdown-toggle btn" data-bs-toggle="dropdown" id="nid">
+            خروج
+        </button>
+        <ul class="dropdown-menu">
+            <li class="nav-item">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <input type="submit" class="nav-link text-dark" value="خروج">
+                </form>
             </li>
         </ul>
     </div>
