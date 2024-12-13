@@ -12,11 +12,12 @@
                     <div @class(['alert w-25','alert-danger'=>$status==false,'alert-success'=>$status==true])>{{$message}}</div>
                 @endif
             </div>
-            @if(isset($editing))
+            @if(isset($editing) && $editing->pic)
                 <div class="m-1">
-                    <img src="{{route('product.show' , ['id'=>$editing->id])}}" class="img-thumbnail w-25">
+                    <img src="{{ asset('storage/product/' . $editing->pic) }}" class="img-thumbnail w-25" alt="{{ $editing->title }}">
                 </div>
             @endif
+
             <div class="m-1">
                 <label class="form-label fw-bold">TITLE:</label>
                 <input class="form-control w-25" type="text" name="title" value="@if(isset($editing)){{$editing->title}} @endif">

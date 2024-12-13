@@ -19,6 +19,7 @@ class productController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function create(request $request)
     {
         $request->validate([
@@ -33,39 +34,50 @@ class productController extends Controller
         return view('admin.product.form' , ['categories' => Category::all() ]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request) {
         $request->validate([
-//            'title' => 'required',
-//            'status' => 'required|in:0,1',
-//            'description' => 'required',
-//            'fl' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
-//            'price' => 'required|numeric',
-//            'discount' => 'required|numeric',
+            'title' => 'required',
+            'status' => 'required|in:0,1',
+            'description' => 'required',
+            'fl' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ensure this is enabled
+            'price' => 'required|numeric',
+            'discount' => 'required|numeric',
         ]);
+
         try {
-            $cat=$request->input('cat');
-            $in =new Product();
+            $cat = $request->input('cat');
+            $in = new Product();
             $in->title = $request->input('title');
             $in->status = $request->input('status');
             $in->description = $request->input('description');
             $in->category_id = $cat;
-            $in->price= $request->input('price');
-            $in->discount= $request->input('discount');
+            $in->price = $request->input('price');
+            $in->discount = $request->input('discount');
             $in->save();
+
+            // Store the image correctly in the "public/product" folder
             if ($request->hasFile('fl')) {
-                $in->pic = $request->file('fl')->storeAs('product' , $in->id.'.'.$request->file('fl')->Extension());
+                $path = $request->file('fl')->storeAs('product', $in->id . '.' . $request->file('fl')->extension());
+                $in->pic = basename($path); // Store only the filename
                 $in->save();
             }
-            $prd=Product::findorFail($in->id);
-            $att = Attribute::where('category_id',$cat)->get();
+
+            // Attach attributes
+            $prd = Product::findOrFail($in->id);
+            $att = Attribute::where('category_id', $cat)->get();
             foreach ($att as $a) {
-                $vl=$request->input($a->title);
-                $prd->attributes()->attach($a->id,['value'=>$vl]);
+                $vl = $request->input($a->title);
+                $prd->attributes()->attach($a->id, ['value' => $vl]);
             }
-            return view('admin.product.secondform', ['status' => true, 'message' => 'کالا با موفقیت ایجاد شد' , 'cat'=>true]);}
-        catch (Exception $exception){
-            return view('admin.product.secondform', ['status' => false, 'message' => 'خطا در بارگذاری عکس' , 'cat'=>false]);}
+
+            return view('admin.product.secondform', ['status' => true, 'message' => 'کالا با موفقیت ایجاد شد', 'cat' => true]);
+        } catch (Exception $exception) {
+            return view('admin.product.secondform', ['status' => false, 'message' => 'خطا در بارگذاری عکس', 'cat' => false]);
+        }
     }
+
+
+
 
     public function index()
     {
@@ -77,44 +89,58 @@ class productController extends Controller
     }
 
 
-    public function show($id){
-        $result = Product::findorFail($id);
-        return Storage::download($result->pic);
+    public function show($id)
+    {
+        // Retrieve the product with its attributes and category
+        $product = Product::with('attributes', 'category')->findOrFail($id);
+
+        // Return the product view for the client (product details page)
+        return view('client.product', compact('product'));
     }
 
 
-    public function update($id,request $request)
-    {
+
+
+    public function update($id, Request $request) {
         $request->validate([
-//            'title' => 'required',
-//            'status' => 'required|in:0,1',
-//            'description' => 'required',
-//            'fl' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
-//            'price' => 'required|numeric',
-//            'discount' => 'required|numeric',
+            'title' => 'required',
+            'status' => 'required|in:0,1',
+            'description' => 'required',
+            'fl' => 'mimes:jpeg,png,jpg,gif,svg|max:2048',  // Ensure this is enabled for image files
+            'price' => 'required|numeric',
+            'discount' => 'required|numeric',
         ]);
+
         try {
-            $in = Product::findorFail($id);
+            $in = Product::findOrFail($id);
             $in->title = $request->input('title');
             $in->status = $request->input('status');
             $in->description = $request->input('description');
-            $in->price= $request->input('price');
+            $in->price = $request->input('price');
             $in->save();
+
+            // Update the image if a new one is uploaded
             if ($request->hasFile('fl')) {
-                $in->pic = $request->file('fl')->storeAs('product' , $in->id.'.'.$request->file('fl')->Extension());
+                $path = $request->file('fl')->storeAs('product', $in->id . '.' . $request->file('fl')->extension());
+                $in->pic = basename($path); // Store only the filename
                 $in->save();
             }
-            $att = Attribute::where('category_id',$in->category_id)->get();
+
+            // Detach old attributes and attach new ones
+            $att = Attribute::where('category_id', $in->category_id)->get();
             $in->attributes()->detach();
             foreach ($att as $a) {
-                $vl=$request->input($a->title);
-                $in->attributes()->attach($a->id,['value'=>$vl]);
+                $vl = $request->input($a->title);
+                $in->attributes()->attach($a->id, ['value' => $vl]);
             }
-            return view('admin.product.secondform', ['status' => true, 'message' => 'رکورد با موفقیت ویرایش شد','cat'=>true]);
+
+            return view('admin.product.secondform', ['status' => true, 'message' => 'رکورد با موفقیت ویرایش شد', 'cat' => true]);
         } catch (Exception $e) {
-            return view('admin.product.secondform', ['status' => false, 'message' => 'خطا درویرایش اطلاعات','cat'=>false]);
+            return view('admin.product.secondform', ['status' => false, 'message' => 'خطا درویرایش اطلاعات', 'cat' => false]);
         }
     }
+
+
 
     public function edit($id)
     {

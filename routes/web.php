@@ -144,6 +144,9 @@ Route::get('/',function (){
     $product=\App\Models\admin\Product::all();
     return view('client.test' , ['menu'=>$menu,'attribute'=>$attribute,'category'=>$category,'page'=>$page,'picture'=>$picture,'gallery'=>$gallery,'picgallery'=>$picgallery,'product'=>$product]);
 })->name('test');
+
+Route::get('/product/{id}', [\App\Http\Controllers\admin\productController::class, 'show'])->name('product.show');
+
 /*
  * client
  */

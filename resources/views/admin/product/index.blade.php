@@ -28,7 +28,9 @@
                     <td>{{$dataresult->title}}</td>
                     <td>{{$dataresult->description}}</td>
                     <td><div @class(['badge','text-white','bg-success'=>$dataresult->status==1,'bg-secondary'=>$dataresult->status==0])>@if($dataresult->status==0){{'unavaiable'}}@elseif($dataresult->status==1){{'avaiable'}}@endif</div></td>
-                    <td><img class="img-thumbnail w-25" src="{{route('product.show' , ['id'=>$dataresult->id])}}"></td>
+                    <td>
+                        <img class="img-thumbnail w-25" src="{{ asset('storage/product/' . $dataresult->pic) }}" alt="{{ $dataresult->title }}">
+                    </td>
                     <td>{{$dataresult->price}}</td>
                     <td>{{$dataresult->discount}}</td>
                     @foreach($cat as $ct)
