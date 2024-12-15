@@ -35,19 +35,23 @@ class menuController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'status' => 'required|in:0,1'
+            'status' => 'required|in:0,1',
+            'url' => 'required|string|unique:menus,url', // Validate URL field
         ]);
-        try {
-            $in=new Menu();
-            $in->title=$request->input('title');
-            $in->status=$request->input('status');
-            $in->save();
-            return view('admin.menu.form',['status'=>true,'message'=>'منو با موفقیت ایجاد شد','pic'=>true]);
-        } catch (Exception $exception){
-            return view('admin.menu.form',['status'=>false,'message'=>'خطا در ایحاد منو']);
-        }
 
+        try {
+            $in = new Menu();
+            $in->title = $request->input('title');
+            $in->status = $request->input('status');
+            $in->url = $request->input('url'); // Save URL field
+            $in->save();
+
+            return view('admin.menu.form', ['status' => true, 'message' => 'منو با موفقیت ایجاد شد', 'editing' => false]);
+        } catch (\Exception $exception) {
+            return view('admin.menu.form', ['status' => false, 'message' => 'خطا در ایجاد منو']);
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -73,18 +77,23 @@ class menuController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'status' => 'required|in:0,1'
+            'status' => 'required|in:0,1',
+            'url' => 'required|string|unique:menus,url,' . $id, // Validate unique URL excluding current menu
         ]);
+
         try {
-            $in=Menu::findOrFail($id);
-            $in->title=$request->input('title');
-            $in->status=$request->input('status');
+            $in = Menu::findOrFail($id);
+            $in->title = $request->input('title');
+            $in->status = $request->input('status');
+            $in->url = $request->input('url'); // Update URL field
             $in->save();
-            return view('admin.menu.form',['status'=>true,'message'=>'منو با موفقیت ویرایش شد','pic'=>true]);
-        } catch (Exception $exception){
-            return view('admin.menu.form',['status'=>false,'message'=>'خطا در ویرایش منو']);
+
+            return view('admin.menu.form', ['status' => true, 'message' => 'منو با موفقیت ویرایش شد', 'editing' => $in]);
+        } catch (\Exception $exception) {
+            return view('admin.menu.form', ['status' => false, 'message' => 'خطا در ویرایش منو']);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

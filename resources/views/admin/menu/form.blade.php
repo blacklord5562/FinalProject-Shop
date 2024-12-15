@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="row">
-        <form action="@if(isset($editing)){{route('menu.update',['id'=>$editing->id])}}@elseif(!isset($editing)){{route('menu.store')}}@endif" method="POST">
+        <form action="@if(isset($editing)){{route('menu.update',['id'=>$editing->id])}}@else{{route('menu.store')}}@endif" method="POST">
             @csrf
             <div class="m-1">
                 @if(isset($status,$message))
@@ -13,8 +13,17 @@
             </div>
             <div class="m-1">
                 <label class="form-label fw-bold">TITLE:</label>
-                <input class="form-control w-25" type="text" name="title" value="@if(isset($editing)){{$editing->title}} @endif">
+                <input class="form-control w-25" type="text" name="title" value="@if(isset($editing)){{$editing->title}}@endif">
                 @error('title')
+                <div class="alert alert-danger w-50">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="m-1">
+                <label class="form-label fw-bold">URL:</label>
+                <input class="form-control w-25" type="text" name="url" placeholder="e.g., / or /products" value="@if(isset($editing)){{$editing->url}}@endif">
+                @error('url')
                 <div class="alert alert-danger w-50">
                     {{$message}}
                 </div>

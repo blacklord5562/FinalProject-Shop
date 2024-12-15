@@ -25,7 +25,9 @@
             <ul class="navbar-nav ms-auto">
                 @foreach($menu as $menuItem)
                     <li class="nav-item">
-                        <a class="nav-link" href="#">{{ $menuItem->title }}</a>
+                        <a class="nav-link" href="{{ $menuItem->url ? url($menuItem->url) : '#' }}">
+                            {{ $menuItem->title }}
+                        </a>
                     </li>
                 @endforeach
                 <li class="nav-item">
