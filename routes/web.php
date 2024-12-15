@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\ProductController;
 
 
 /*
@@ -146,7 +147,9 @@ Route::get('/',function (){
 })->name('test');
 
 Route::get('/product/{id}', [\App\Http\Controllers\admin\productController::class, 'show'])->name('product.show');
-
+Route::get('/product', [\App\Http\Controllers\admin\productController::class, 'list'])->name('product.list');
+//Route::get('/about', [PageController::class, 'about'])->name('about');  // About page
+//Route::get('/faq', [PageController::class, 'faq'])->name('faq');  // FAQ page
 /*
  * client
  */

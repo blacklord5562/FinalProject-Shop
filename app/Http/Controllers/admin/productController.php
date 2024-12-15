@@ -162,4 +162,17 @@ class productController extends Controller
         storage::delete($prd->pic);
         return $this->index();
     }
+
+    public function list(Request $request)
+    {
+        // Fetch products, filter by name if search query exists
+        $query = $request->input('search');
+        $products = Product::query()
+            ->when($query, function ($q) use ($query) {
+                return $q->where('title', 'like', '%' . $query . '%');
+            })
+            ->get();
+
+        return view('client.product_list', compact('products'));
+    }
 }

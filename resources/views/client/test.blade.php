@@ -56,11 +56,14 @@
             <div class="col-md-5 col-1 d-flex justify-content-around">
                 @foreach($menu as $menuItem)
                     <div class="diactiv bigdis">
-                        {{ $menuItem->title }}<br>
+                        <!-- Dynamically link based on menu item URL -->
+                        <a href="{{ $menuItem->url ?? '#' }}">{{ $menuItem->title }}</a>  <!-- Fallback to '#' if URL is not defined -->
+                        <br>
                         <div class="underlinehovercls mt-2"></div>
                     </div>
                 @endforeach
             </div>
+
             <div class="col-5 text-end fs-4">
                 فرنوشاپ
             </div>
@@ -89,7 +92,9 @@
             <div class="col-md-3 col-6">
                 <h2 class="mb-4 section-title" dir="rtl">ساخته شده با بهترین متریال ها.</h2>
                 <p class="fs-6" dir="rtl"> این یک نوشته آزمایشی است که به طراحان و برنامه نویسان کمک میکند تا این عزیزان با بهره گیری از این نوشته تستی و آزمایشی بتوانند نمونه تکمیل شده از پروژه و طرح خودشان را به کارفرما نمایش دهند، </p>
-                <button class="btn btn-success rounded-pill fs-6">جست و جو</button>
+                <button class="btn btn-success rounded-pill fs-6">
+                    <a href="{{ url('/product') }}" class="text-white">جست و جو</a>
+                </button>
             </div>
         </div>
     </div>
@@ -151,7 +156,9 @@
             <div class="col-md-3 col-6">
                 <h2 class="mb-4 section-title" dir="rtl">ساخته شده با بهترین متریال ها.</h2>
                 <p class="fs-6" dir="rtl"> این یک نوشته آزمایشی است که به طراحان و برنامه نویسان کمک میکند تا این عزیزان با بهره گیری از این نوشته تستی و آزمایشی بتوانند نمونه تکمیل شده از پروژه و طرح خودشان را به کارفرما نمایش دهند، </p>
-                <button class="btn btn-success rounded-pill fs-6">جست و جو</button>
+                <button class="btn btn-success rounded-pill fs-6">
+                    <a href="{{ url('/product') }}" class="text-white">جست و جو</a>
+                </button>
             </div>
         </div>
     </div>
