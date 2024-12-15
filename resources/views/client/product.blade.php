@@ -14,16 +14,46 @@
     <title>Product Details</title>
 </head>
 <body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">فرنوشاپ</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                @foreach($menu as $menuItem)
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ $menuItem->title }}</a>
+                    </li>
+                @endforeach
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ Auth::check() ? (Auth::user()->role === 'admin' ? route('admin.dashboard') : route('home')) : route('login') }}">
+                        <i class="fa fa-user"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-shopping-cart"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Product Details Section -->
 <div class="product-detail container my-5">
     <div class="row">
         <!-- Product Image -->
-        <div class="col-md-6 product-image">
+        <div class="col-md-6 product-image d-flex align-items-center justify-content-center">
             <!-- Use asset() to link to the image stored in the storage folder -->
             <img src="{{ asset('storage/product/' . $product->pic) }}" alt="{{ $product->title }}" class="img-fluid">
         </div>
 
         <!-- Product Information -->
-        <div class="col-md-6 product-info">
+        <div class="col-md-6 product-info text-center">
             <h1>{{ $product->title }}</h1>
             <p class="description">{{ $product->description }}</p>
             <p class="status">Status: <span>{{ $product->status ? 'Available' : 'Unavailable' }}</span></p>
@@ -45,5 +75,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>
