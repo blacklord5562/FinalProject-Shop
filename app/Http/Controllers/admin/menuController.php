@@ -66,8 +66,8 @@ class menuController extends Controller
      */
     public function edit(string $id)
     {
-        $result=Menu::FindOrFail($id);
-        return view('admin.menu.form',['id'=>$id,'editing'=>$result]);
+        $menu = Menu::findOrFail($id); // Fetch the menu by ID
+        return view('admin.menu.form', ['editing' => $menu]);
     }
 
     /**
