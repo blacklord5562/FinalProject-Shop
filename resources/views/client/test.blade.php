@@ -56,13 +56,16 @@
             <div class="col-md-5 col-1 d-flex justify-content-around">
                 @foreach($menu as $menuItem)
                     <div class="diactiv bigdis">
-                        <!-- Dynamically link based on menu item URL -->
-                        <a href="{{ $menuItem->url ?? '#' }}">{{ $menuItem->title }}</a>  <!-- Fallback to '#' if URL is not defined -->
+                        <!-- Dynamically link based on menu item -->
+                        <a href="{{ route('menu.content', $menuItem->id) }}" class="text-white text-decoration-none">
+                            {{ $menuItem->title }}
+                        </a>
                         <br>
                         <div class="underlinehovercls mt-2"></div>
                     </div>
                 @endforeach
             </div>
+
 
             <div class="col-5 text-end fs-4">
                 فرنوشاپ
@@ -88,17 +91,36 @@
 </div>
 <div class="container-fluid bg2cls py-5">
     <div class="container">
-        <div class="row" id="product-container">
+        <div class="row">
+            <!-- Section title -->
             <div class="col-md-3 col-6">
                 <h2 class="mb-4 section-title" dir="rtl">ساخته شده با بهترین متریال ها.</h2>
-                <p class="fs-6" dir="rtl"> این یک نوشته آزمایشی است که به طراحان و برنامه نویسان کمک میکند تا این عزیزان با بهره گیری از این نوشته تستی و آزمایشی بتوانند نمونه تکمیل شده از پروژه و طرح خودشان را به کارفرما نمایش دهند، </p>
-                <button class="btn btn-success rounded-pill fs-6">
-                    <a href="{{ url('/product') }}" class="text-white">جست و جو</a>
-                </button>
+                <p class="fs-6" dir="rtl">
+                    این یک نوشته آزمایشی است که به طراحان و برنامه نویسان کمک میکند تا این عزیزان با بهره گیری از این نوشته تستی و آزمایشی بتوانند نمونه تکمیل شده از پروژه و طرح خودشان را به کارفرما نمایش دهند.
+                </p>
+                <a href="{{ url('/product') }}" class="btn btn-success rounded-pill fs-6 text-white">جست و جو</a>
             </div>
+
+            <!-- Dynamically render products -->
+            @foreach($product as $item)
+                <div class="col-md-3 col-6 text-center mb-4">
+                    <!-- Wrap the card with a clickable link -->
+                    <a href="{{ url('/product/' . $item->id) }}" class="text-decoration-none text-dark">
+                        <div class="showcls rounded-2 p-3 shadow-sm">
+                            <img src="{{ asset('storage/product/' . $item->pic) }}" class="img-fluid mb-2" alt="{{ $item->title }}">
+                            <h5 class="fw-bold">{{ $item->title }}</h5>
+                            <p class="text-success fw-bold">{{ number_format($item->price) }} تومان</p>
+                            <div class="discls">
+                                <a class="fa fa-cart-plus btn btn-outline-success rounded-pill" onclick="addToBasket({{ $item->id }})"></a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
         </div>
     </div>
 </div>
+
 <div class="container-fluid bg2cls py-5">
     <div class="row justify-content-center">
         <div class="col-12 p-0">
@@ -152,17 +174,36 @@
 
 <div class="container-fluid bg2cls py-5">
     <div class="container">
-        <div class="row" id="product-container2">
+        <div class="row">
+            <!-- Section title -->
             <div class="col-md-3 col-6">
                 <h2 class="mb-4 section-title" dir="rtl">ساخته شده با بهترین متریال ها.</h2>
-                <p class="fs-6" dir="rtl"> این یک نوشته آزمایشی است که به طراحان و برنامه نویسان کمک میکند تا این عزیزان با بهره گیری از این نوشته تستی و آزمایشی بتوانند نمونه تکمیل شده از پروژه و طرح خودشان را به کارفرما نمایش دهند، </p>
-                <button class="btn btn-success rounded-pill fs-6">
-                    <a href="{{ url('/product') }}" class="text-white">جست و جو</a>
-                </button>
+                <p class="fs-6" dir="rtl">
+                    این یک نوشته آزمایشی است که به طراحان و برنامه نویسان کمک میکند تا این عزیزان با بهره گیری از این نوشته تستی و آزمایشی بتوانند نمونه تکمیل شده از پروژه و طرح خودشان را به کارفرما نمایش دهند.
+                </p>
+                <a href="{{ url('/product') }}" class="btn btn-success rounded-pill fs-6 text-white">جست و جو</a>
             </div>
+
+            <!-- Dynamically render products -->
+            @foreach($producttwo as $item)
+                <div class="col-md-3 col-6 text-center mb-4">
+                    <!-- Wrap the card with a clickable link -->
+                    <a href="{{ url('/product/' . $item->id) }}" class="text-decoration-none text-dark">
+                        <div class="showcls rounded-2 p-3 shadow-sm">
+                            <img src="{{ asset('storage/product/' . $item->pic) }}" class="img-fluid mb-2" alt="{{ $item->title }}">
+                            <h5 class="fw-bold">{{ $item->title }}</h5>
+                            <p class="text-success fw-bold">{{ number_format($item->price) }} تومان</p>
+                            <div class="discls">
+                                <a class="fa fa-cart-plus btn btn-outline-success rounded-pill" onclick="addToBasket({{ $item->id }})"></a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
         </div>
     </div>
 </div>
+
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-12 py-5">

@@ -4,6 +4,15 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\ProductController;
+use App\Models\admin\Menu;
+use App\Models\admin\Attribute;
+use App\Models\admin\Category;
+use App\Models\admin\Page;
+use App\Models\admin\Picture;
+use App\Models\admin\Gallery;
+use App\Models\admin\Picgallery;
+use App\Http\Controllers\admin\pageController;
+use App\Models\admin\Product;
 
 
 /*
@@ -94,6 +103,9 @@ Route::get('/admin/show/picture/{id}', [\App\Http\Controllers\admin\pictureContr
 Route::resource('/admin/menu', \App\Http\Controllers\admin\menuController::class)->except(['update']);
 Route::post('/admin/update/menu/{id}', [\App\Http\Controllers\admin\menuController::class, 'update'])->name('menu.update');
 
+
+Route::get('/menu/{id}', [\App\Http\Controllers\admin\pageController::class, 'showMenuContent'])->name('menu.content');
+
 /*
  * Picture Gallery Routes
  */
@@ -134,21 +146,38 @@ Route::get('/admin/create/product', [\App\Http\Controllers\admin\productControll
 Route::post('/admin/store/product', [\App\Http\Controllers\admin\productController::class, 'store'])->name('product.store');
 Route::get('admin/edit/product/{id}', [\App\Http\Controllers\admin\productController::class, 'edit'])->name('product.edit');
 Route::delete('/admin/delete/product/{id}', [\App\Http\Controllers\admin\productController::class, 'destroy'])->name('product.destroy');
-Route::get('/',function (){
+Route::get('/', function () {
     $menu = \App\Models\admin\Menu::where('status', 1)->get();
-    $attribute=\App\Models\admin\Attribute::all();
-    $category=\App\Models\admin\Category::all();
-    $page=\App\Models\admin\Page::all();
-    $picture=\App\Models\admin\Picture::all();
-    $gallery=\App\Models\admin\Gallery::all();
-    $picgallery=\App\Models\admin\Picgallery::all();
-    $product=\App\Models\admin\Product::all();
-    return view('client.test' , ['menu'=>$menu,'attribute'=>$attribute,'category'=>$category,'page'=>$page,'picture'=>$picture,'gallery'=>$gallery,'picgallery'=>$picgallery,'product'=>$product]);
+    $attribute = Attribute::all();
+    $category = \App\Models\admin\Category::all();
+    $page = \App\Models\admin\Page::all();
+    $picture = \App\Models\admin\Picture::all();
+    $gallery = \App\Models\admin\Gallery::all();
+    $picgallery = \App\Models\admin\Picgallery::all();
+
+    // Fetch 3 random products
+    $product = \App\Models\admin\Product::inRandomOrder()->take(3)->get();
+    $producttwo = \App\Models\admin\Product::inRandomOrder()->take(3)->get();
+
+    return view('client.test', [
+        'menu' => $menu,
+        'attribute' => $attribute,
+        'category' => $category,
+        'page' => $page,
+        'picture' => $picture,
+        'gallery' => $gallery,
+        'picgallery' => $picgallery,
+        'product' => $product,
+        'producttwo'=>$producttwo
+    ]);
 })->name('test');
 
 Route::get('/product/{id}', [\App\Http\Controllers\admin\productController::class, 'show'])->name('product.show');
 Route::get('/product', [\App\Http\Controllers\admin\productController::class, 'list'])->name('product.list');
-//Route::get('/about', [PageController::class, 'about'])->name('about');  // About page
+Route::get('/page/{id}', [pageController::class, 'showPage'])->name('page.show');
+
+
+//Route::get('/about', [\App\Http\Controllers\admin\pageController::class, 'about'])->name('about');// About page
 //Route::get('/faq', [PageController::class, 'faq'])->name('faq');  // FAQ page
 /*
  * client

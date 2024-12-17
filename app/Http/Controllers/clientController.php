@@ -7,31 +7,51 @@ use App\Models\admin\Page;
 use App\Models\admin\Picgallery;
 use App\Models\admin\Picture;
 use Illuminate\Http\Request;
+use App\Models\admin\Product;
 
 class clientController extends Controller
 {
-    public function index($mm){
-        $idd=$mm;
-        $menu = Menu::findorFail($idd);
-        $menus = Menu::all();
-        $pages = Page::where('menu_id',$mm)->get();
-        $pictures =Picture::where('menu_id',$mm)->get();
-        $galleries = Gallery::where('menu_id',$mm)->get();
+    public function index($mm = null)
+    {
+        $menu = Menu::all(); // All menus
+        $pages = Page::all();
+        $pictures = Picture::all();
+        $galleries = Gallery::all();
         $picgalleries = Picgallery::all();
-        if ($mm==1){
-            return view('client.master' , ['menus'=>$menus,'pages'=>$pages,'pictures'=>$pictures]);
+
+        // Fetch 8 random products
+        $products = Product::inRandomOrder()->take(8)->get();
+
+        // If $mm is 1, return master view
+        if ($mm == 1) {
+            return view('client.master', [
+                'menus' => $menu,
+                'pages' => $pages,
+                'pictures' => $pictures,
+                'products' => $products,
+            ]);
         }
-        return view('client.client' , ['menus' => $menus, 'pages' => $pages, 'pictures' => $pictures , 'menu' => $menu , 'galleries' => $galleries , 'picgalleries' => $picgalleries ]);
+
+        // Otherwise return the regular client view
+        return view('client.client', [
+            'menus' => $menu,
+            'pages' => $pages,
+            'pictures' => $pictures,
+            'galleries' => $galleries,
+            'picgalleries' => $picgalleries,
+            'products' => $products,
+        ]);
     }
+
     public function login()
     {
         $menus = Menu::all();
-        return view('client.login' ,['menus' => $menus]);
+        return view('client.login', ['menus' => $menus]);
     }
 
     public function signup()
     {
-
+        // Additional logic for signup (if needed)
     }
 }
 

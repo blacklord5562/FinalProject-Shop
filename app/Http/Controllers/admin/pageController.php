@@ -110,4 +110,26 @@ class pageController extends Controller
         Page::destroy($result->id);
         return $this->index();
     }
+
+    public function showMenuContent($id)
+    {
+        $menu = Menu::findOrFail($id);
+
+        // Exception for "صفحه اصلی" (Home) and "محصولات" (Products)
+        if ($menu->title === 'صفحه اصلی') {
+            return redirect()->route('test'); // Redirect to the home page
+        }
+        if ($menu->title === 'محصولات') {
+            return redirect()->route('product.list'); // Redirect to the product page
+        }
+
+        // Default dynamic content for other menus
+        $menus = Menu::all(); // Fetch all menus for navigation
+        $pages = Page::where('menu_id', $id)->where('status', 1)->get(); // Fetch active pages
+        $pictures = Picture::where('menu_id', $id)->get(); // Fetch pictures related to the menu
+
+        return view('client.menu_content', compact('menu', 'menus', 'pages', 'pictures'));
+    }
+
+
 }
